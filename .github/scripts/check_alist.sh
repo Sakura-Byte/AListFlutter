@@ -1,6 +1,6 @@
 #!/bin/bash
 
-GIT_REPO="https://github.com/alist-org/alist.git"
+GIT_REPO="https://github.com/Sakura-Byte/alist.git"
 
 function to_int() {
     echo $(echo "$1" | grep -oE '[0-9]+' | tr -d '\n')
@@ -37,8 +37,10 @@ echo "alist_version=$LATEST_VER" >> "$GITHUB_ENV"
 VER=$(cat "$VERSION_FILE")
 
 if [ -z "$VER" ]; then
-  VER="v3.25.1"
-  echo "No version file, use default version ${VER}"
+  # get version through github api
+  GH_API_URL = "https://api.github.com/repos/Sakura-Byte/alist/releases/latest"
+  VER=$(curl -s $GH_API_URL | grep tag_name | cut -d '"' -f 4)
+  echo "Get version from github api: $VER"
 fi
 
 VER_INT=$(to_int $VER)
